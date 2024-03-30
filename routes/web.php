@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ChirpController;
+use App\Http\Controllers\HitterController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Hitter;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,6 +16,15 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::resource('hitters', HitterController::class)
+    ->only(['index']);
+
+Route::get('/hitters/{hitter:id}', function (Hitter $hitter) {
+    return Inertia::render('Hitter', [
+        'hitter' => $hitter
+    ]);
+})->name('hitter.hitter');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -30,4 +41,4 @@ Route::resource('chirps', ChirpController::class)
     ->only(['index', 'store', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
